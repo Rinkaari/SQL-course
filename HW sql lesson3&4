@@ -1,0 +1,75 @@
+#ДОМАШНЕЕ ЗАДАНИЕ №3
+#1. Сделать запрос, в котором мы выберем все данные о городе – регион, страна.
+
+SELECT `cities`.`title` AS 'city name', 
+`regions`.`title` as 'region name', 
+`countries`.`title` as 'country name' 
+FROM `cities` 
+LEFT JOIN `countries` 
+ON `cities`.`country_id` = `countries`.`id` 
+LEFT JOIN `regions` 
+ON `cities`.`region_id` = `regions`.`id`; 
+
+#2. Выбрать все города из Московской области.
+#В моем случае будет регион Бургундия, Франция
+
+SELECT `title` 
+FROM `cities` 
+WHERE `region_id` = (SELECT `id` FROM `regions` WHERE `title` = 'Burgundy')
+
+База данных «Сотрудники»:
+
+#1. Выбрать среднюю зарплату по отделам.
+SELECT AVG(`Salary`) AS `Average_salary`, `Department_id` FROM `personnel` GROUP BY `Department_id`;
+
+#2. Выбрать максимальную зарплату у сотрудника.
+SELECT * FROM `personnel` WHERE `Salary` = (SELECT MAX(`Salary`) FROM `personnel`);
+
+#3. Удалить одного сотрудника, у которого максимальная зарплата.
+DELETE FROM `personnel` WHERE `Id` = (SELECT * FROM 
+(SELECT `Id` FROM `personnel` WHERE `Salary` = 
+(SELECT MAX(`Salary`) FROM `personnel` LIMIT 1)) 
+AS `wtf`);
+
+#4. Посчитать количество сотрудников во всех отделах.
+SELECT COUNT(`Id`) AS `staff number`,`Department_id` FROM `personnel` GROUP BY `Department_id`;
+
+#5. Найти количество сотрудников в отделах и посмотреть, сколько всего денег получает отдел.
+SELECT COUNT(`personnel`.`Id`) AS `staff number`, SUM(`Salary`) AS `payroll`, `departments`.`Title` AS `Dept_name`
+FROM `personnel` 
+LEFT JOIN `departments` 
+ON `personnel`.`Department_id` = `departments`.`Id`
+GROUP BY `Department_id`;
+
+#ДОМАШНЕЕ ЗАДАНИЕ №4
+#1. Создать VIEW на основе запросов, которые вы сделали в ДЗ к уроку 3.
+CREATE VIEW `dept_payroll_count` AS
+SELECT COUNT(`personnel`.`Id`) AS `staff number`, SUM(`Salary`) AS `payroll`, `departments`.`Title` AS `Dept_name`
+FROM `personnel` 
+LEFT JOIN `departments` 
+ON `personnel`.`Department_id` = `departments`.`Id`
+GROUP BY `Department_id`;
+
+#2. Создать функцию, которая найдет менеджера по имени и фамилии.
+CREATE FUNCTION `find_manager_id` (manager_name VARCHAR(100), manager_lastname VARCHAR(100))
+RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+RETURN (SELECT `Id` FROM `personnel` WHERE `Name` = manager_name AND `Lastname` = manager_lastname);
+
+SELECT `find_manager_id`('Петро', 'Василько');
+
+#3. Создать триггер, который при добавлении нового сотрудника будет выплачивать ему вступительный бонус, занося запись об этом в таблицу salary.
+CREATE TABLE `bonus_paid` (
+`Id` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+`Amount` INT,
+`Staff_id` INT);
+
+CREATE TRIGGER `bonus_payment_trig`
+AFTER INSERT ON `personnel`
+FOR EACH ROW
+INSERT INTO `bonus_paid` (`Amount`, `Staff_id`) VALUES (NEW.`Salary` * 0.1, NEW.`Id`);
+
+INSERT INTO `personnel` (`Name`, `Lastname`, `Salary`, `Department_id`) VALUES ('Прохор', 'Потапов', 400000, 4);
+
+
