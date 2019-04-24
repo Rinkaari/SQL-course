@@ -1,0 +1,47 @@
+#переписал транзакцию из вебинара без использования переменных и с оператором where вместе с insert into (он относится к SELECT)
+
+BEGIN;
+INSERT INTO `bonus_paid` (`Amount`, `Staff_id`) SELECT ((SELECT AVG(`Salary`) FROM `personnel`) - (SELECT MIN(`Salary`) FROM `personnel`)),
+`Id` FROM `personnel` WHERE `Salary` = (SELECT MIN(`Salary`) FROM `personnel`);
+COMMIT;
+
+# Транзакция, которая в зависимости от отдела либо увелчивает либо уменьшает зарплату сотрудников. Из за неэффективности менеджмента, их зарплата снижена на 100 000.
+#По причине эффективности - у IT повышена на 50 000, у Finance на 50 000.
+
+BEGIN;
+SET sql_safe_updates = 'OFF';
+UPDATE `personnel` SET `Salary` = (`Salary` - 100000) WHERE `Id` IN ( SELECT * FROM
+(SELECT `Id` FROM `personnel` WHERE `Department_id` = (
+SELECT `Id` FROM `departments` WHERE `Title` = 'Management')) as `temp2`);
+UPDATE `personnel` SET `Salary` = (`Salary` + 50000) WHERE `Id` IN ( SELECT * FROM
+(SELECT `Id` FROM `personnel` WHERE `Department_id` = (
+SELECT `Id` FROM `departments` WHERE `Title` = 'IT')) as `temp3`);
+UPDATE `personnel` SET `Salary` = (`Salary` + 50000) WHERE `Id` IN ( SELECT * FROM
+(SELECT `Id` FROM `personnel` WHERE `Department_id` = (
+SELECT `Id` FROM `departments` WHERE `Title` = 'FINANCE')) as `temp4`);
+SET sql_safe_updates = 'ON';
+COMMIT;
+
+
+#Анализируем запросы с помощью EXPLAIN
+
+mysql> EXPLAIN SELECT `Lastname` FROM `personnel` WHERE `Id` IN (SELECT `Staff_id` FROM `bonus_paid`);
++----+--------------+-------------+------------+--------+---------------+---------+---------+----------------------+------+----------+-------------+
+| id | select_type  | table       | partitions | type   | possible_keys | key     | key_len | ref                  | rows | filtered | Extra       |
++----+--------------+-------------+------------+--------+---------------+---------+---------+----------------------+------+----------+-------------+
+|  1 | SIMPLE       | <subquery2> | NULL       | ALL    | NULL          | NULL    | NULL    | NULL                 | NULL |   100.00 | Using where |
+|  1 | SIMPLE       | personnel   | NULL       | eq_ref | PRIMARY       | PRIMARY | 4       | <subquery2>.Staff_id |    1 |   100.00 | NULL        |
+|  2 | MATERIALIZED | bonus_paid  | NULL       | ALL    | NULL          | NULL    | NULL    | NULL                 |    2 |   100.00 | NULL        |
++----+--------------+-------------+------------+--------+---------------+---------+---------+----------------------+------+----------+-------------+
+3 rows in set, 1 warning (0.00 sec)
+#используется материализованный SELECT для оптимизации запроса
+
+
+mysql> EXPLAIN SELECT SUM(`Salary`), `Department_id` FROM `personnel` GROUP BY `Department_id`;
++----+-------------+-----------+------------+------+---------------+------+---------+------+------+----------+-----------------+
+| id | select_type | table     | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra           |
++----+-------------+-----------+------------+------+---------------+------+---------+------+------+----------+-----------------+
+|  1 | SIMPLE      | personnel | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    9 |   100.00 | Using temporary |
++----+-------------+-----------+------------+------+---------------+------+---------+------+------+----------+-----------------+
+1 row in set, 1 warning (0.00 sec)
+#Обычный запрос использующий временную таблицу для отображения сгруппированных данных
