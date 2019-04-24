@@ -27,7 +27,7 @@ CREATE TABLE `bonus_paid` (
   `Amount` int(11) DEFAULT NULL,
   `Staff_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +36,7 @@ CREATE TABLE `bonus_paid` (
 
 LOCK TABLES `bonus_paid` WRITE;
 /*!40000 ALTER TABLE `bonus_paid` DISABLE KEYS */;
-INSERT INTO `bonus_paid` VALUES (1,40000,9);
+INSERT INTO `bonus_paid` VALUES (1,40000,9),(14,81001,11);
 /*!40000 ALTER TABLE `bonus_paid` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-22 14:26:29
+-- Dump completed on 2019-04-25  0:29:00

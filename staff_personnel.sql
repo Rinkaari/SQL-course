@@ -29,7 +29,7 @@ CREATE TABLE `personnel` (
   `Salary` int(11) DEFAULT NULL,
   `Department_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `personnel` (
 
 LOCK TABLES `personnel` WRITE;
 /*!40000 ALTER TABLE `personnel` DISABLE KEYS */;
-INSERT INTO `personnel` VALUES (1,'Иван','Петров',10000,1),(2,'Петр','Иванов',15000,1),(3,'Александр','Сергеев',20000,2),(4,'Сергей','Александров',25000,2),(6,'Василий','Пузько',200000,4),(7,'Петро','Василько',150000,4),(9,'Прохор','Потапов',400000,4);
+INSERT INTO `personnel` VALUES (1,'Иван','Петров',74414,1),(2,'Петр','Иванов',86623,1),(3,'Александр','Сергеев',75000,2),(4,'Сергей','Александров',81250,2),(6,'Василий','Пузько',263281,4),(7,'Петро','Василько',247461,4),(9,'Прохор','Потапов',326563,4),(10,'Кирилл','Кокошкин',74414,1),(11,'Валентин','Мутошкин',62500,2);
 /*!40000 ALTER TABLE `personnel` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -66,4 +66,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-22 14:26:30
+-- Dump completed on 2019-04-25  0:29:01
