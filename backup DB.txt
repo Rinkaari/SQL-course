@@ -1,0 +1,55 @@
+C:\Users\user2>"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u root -p lesson1 > c:\backup\dump.sql
+Enter password: ******
+
+C:\Users\user2>"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p
+Enter password: ******
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| lesson1            |
+| mysql              |
+| performance_schema |
+| staff              |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> DROP DATABASE lesson1;
+Query OK, 3 rows affected (0.10 sec)
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| staff              |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE DATABASE lesson1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> quit
+Bye
+
+C:\Users\user2>"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p lesson1 < c:\backup\dump.sql
+Enter password: ******
+
+C:\Users\user2>"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p lesson1
+Enter password: ******
+
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_lesson1 |
++-------------------+
+| cities            |
+| countries         |
+| regions           |
++-------------------+
+3 rows in set (0.00 sec)

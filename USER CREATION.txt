@@ -1,0 +1,72 @@
+C:\Users\user2>"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p
+Enter password: ******
+
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_lesson1 |
++-------------------+
+| cities            |
+| countries         |
+| regions           |
++-------------------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE USER 'newuser3'@'localhost' IDENTIFIED BY '123456';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> GRANT ALL PRIVILEGES ON `lesson1`.`cities` TO 'newuser3'@'localhost';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> quit
+Bye
+
+C:\Users\user2>"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u newuser3 -p
+Enter password: ******
+
+mysql> USE lesson1;
+Database changed
+
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_lesson1 |
++-------------------+
+| cities            |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM `cities`;
++----+------------+-----------+-----------+-------------------+
+| id | country_id | important | region_id | title             |
++----+------------+-----------+-----------+-------------------+
+|  1 |          4 |         0 |         1 | Munich            |
+|  2 |          4 |         0 |         1 | Nuremberg         |
+|  3 |          4 |         0 |         1 | Augsburg          |
+|  4 |          4 |         0 |         2 | Altstadt          |
+|  5 |          4 |         0 |         2 | Arbergen          |
+|  6 |          4 |         0 |         2 | Blomendal         |
+|  7 |          4 |         0 |         3 | Frankfurt am Main |
+|  8 |          4 |         0 |         3 | Wiesbaden         |
+|  9 |          4 |         0 |         3 | Kassel            |
+| 10 |          3 |         0 |         4 | Dijon             |
+| 11 |          3 |         0 |         4 | Autun             |
+| 12 |          3 |         0 |         4 | Sens              |
+| 13 |          3 |         0 |         5 | Metz              |
+| 14 |          3 |         0 |         5 | Nancy             |
+| 15 |          3 |         0 |         5 | Thionville        |
+| 16 |          3 |         0 |         6 | Limoges           |
+| 17 |          3 |         0 |         6 | Tulle             |
+| 18 |          3 |         0 |         6 | Ussel             |
+| 19 |          1 |         0 |         7 | Adamsville        |
+| 20 |          1 |         0 |         7 | Akron             |
+| 21 |          1 |         0 |         7 | Beaverton         |
+| 22 |          1 |         0 |         8 | Acworth           |
+| 23 |          1 |         0 |         8 | Barwick           |
+| 24 |          1 |         0 |         8 | Alapaha           |
+| 25 |          1 |         0 |         9 | Auburn            |
+| 26 |          1 |         0 |         9 | Camas             |
+| 27 |          1 |         0 |         9 | Bothell           |
++----+------------+-----------+-----------+-------------------+
+27 rows in set (0.02 sec)
